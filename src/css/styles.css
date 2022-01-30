@@ -1,0 +1,18 @@
+.App {
+  text-align: center;
+  height: 100vh
+}
+
+
+/* .productSize{
+  width: 260px;
+  height: 390px
+} */
+
+.textArea {
+  resize: none;
+}
+
+.align-end{
+  justify-self: flex-end;
+}
