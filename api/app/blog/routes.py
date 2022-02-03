@@ -15,7 +15,6 @@ def apiPosts():
     return jsonify([post.to_dict() for post in posts])
 
 @blog.route('/api/create/post', methods=['POST'])
-@token_required
 def apiRegister():
     # grabbing the body of the json body from the request
     data = request.json
@@ -27,7 +26,7 @@ def apiRegister():
 
     user = User.query.filter_by(username=username).first()
     if user:
-        post = Post(text, id)
+        post = Post(text,username, id)
         
         db.session.add(post)
         db.session.commit()

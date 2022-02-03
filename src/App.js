@@ -12,19 +12,60 @@ import CreatePost from './views/CreatePost';
 import Cart from './views/Cart';
 import Game from './views/Game';
 import StripeShop from './views/StripeShop';
+import Legend from './components/Legend';
 import { getDatabase, ref, child, get, set } from 'firebase/database';
 
-
+// create demo products
+const demoProducts = [
+  {
+    id: 1,
+    name: "Extra Lives",
+    image: 'https://cdn.dribbble.com/users/192231/screenshots/14773461/artboard_4_4x.png',
+    description: "Ldfjlkasjd lkjasdklfj aklsdjf kljlj laksjdf lkjaklsdj lkasdf ",
+    price: 2,
+  },
+  {
+    id: 2,
+    name: "Extra Lives",
+    image: 'https://cdn.dribbble.com/users/192231/screenshots/14773461/artboard_4_4x.png',
+    description: "Ldfjlkasjd lkjasdklfj aklsdjf kljlj laksjdf lkjaklsdj lkasdf ",
+    price: 2,
+  },
+  {
+    id: 3,
+    name: "Extra Lives",
+    image: 'https://cdn.dribbble.com/users/192231/screenshots/14773461/artboard_4_4x.png',
+    description: "Ldfjlkasjd lkjasdklfj aklsdjf kljlj laksjdf lkjaklsdj lkasdf ",
+    price: 2,
+  },
+  {
+    id: 4,
+    name: "Extra Lives",
+    image: 'https://cdn.dribbble.com/users/192231/screenshots/14773461/artboard_4_4x.png',
+    description: "Ldfjlkasjd lkjasdklfj aklsdjf kljlj laksjdf lkjaklsdj lkasdf ",
+    price: 2,
+  },
+  {
+    id: 5,
+    name: "Extra Lives",
+    image: 'https://cdn.dribbble.com/users/192231/screenshots/14773461/artboard_4_4x.png',
+    description: "Ldfjlkasjd lkjasdklfj aklsdjf kljlj laksjdf lkjaklsdj lkasdf ",
+    price: 2,
+  },
+]
 
 function App() {
- 
+  
+  
+  let user = localStorage.getItem('user')
+  user = JSON.parse(user) 
+  
   // Storing user info locally
-  const user = localStorage.getItem('user') 
   
   // state
   const [currentUser, setCurrentUser] = useState({})
   const [isLoggedIn, setIsLoggedIn] = useState(() => false)
-  const [products, setProducts] = useState(()=>[])
+  const [products, setProducts] = useState(demoProducts)
   const [cart, setCart] = useState(()=>[])
   const [stripeCart, setStripeCart] = useState({total: 0, size: 0, items: {}})
 
@@ -148,7 +189,7 @@ function App() {
   // check if there is a user stored locally and log them in
   useEffect(()=>{
     if(user) {
-      setCurrentUser(JSON.parse(user));
+      setCurrentUser(user);
       setIsLoggedIn(true);
     }
   },[])
@@ -163,7 +204,7 @@ function App() {
   
   return (
     
-    <div className="App">  
+    <div id="app">  
       <Navbar 
         currentUser={currentUser}
         isLoggedIn={isLoggedIn} 
@@ -171,19 +212,21 @@ function App() {
         sumTotalCart={sumTotalCart}
         cart={cart}
       /> 
-      
-      <Routes>
-        <Route path='/' element= {<Home/>}/>
-        <Route path='/shop' element={<Shop products= {products} user_id={currentUser.id} addToCartAPI ={addToCartAPI} addToCart={addToCart}/>} />
-        <Route path='/shop/:id' element={<SingleProduct user_id={currentUser.id} addToCartAPI ={addToCartAPI} addToCart ={addToCart}/>} />
-        <Route path='/stripe/shop' element={<StripeShop addToStripeCart={addToStripeCart}/>} />
-        <Route path='/cart' element={<Cart sumTotalCart ={sumTotalCart} removeFromCart={removeFromCart} cart={cart}/>} />
-        <Route path='/register' element={<Register/>} />
-        <Route path='/login' element={<Login logMeIn = {logMeIn}/>} />
-        <Route path='/chat' element={<Blog/>} />
-        <Route path='/posts/create' element={<CreatePost currentUser={currentUser}/>} />
-        <Route path='/game' element={<Game/>} />
-      </Routes>
+      <div id="main" className='container-xl position-relative' style={{overflow: "visible !important"}}>      
+        <Routes>
+          <Route path='/' element= {<Home/>}/>
+          <Route path='/shop' element={<Shop products= {products} user_id={currentUser.id} addToCartAPI ={addToCartAPI} addToCart={addToCart}/>} />
+          <Route path='/shop/:id' element={<SingleProduct user_id={currentUser.id} addToCartAPI ={addToCartAPI} addToCart ={addToCart}/>} />
+          <Route path='/stripe/shop' element={<StripeShop addToStripeCart={addToStripeCart}/>} />
+          <Route path='/cart' element={<Cart sumTotalCart ={sumTotalCart} removeFromCart={removeFromCart} cart={cart}/>} />
+          <Route path='/register' element={<Register/>} />
+          <Route path='/login' element={<Login logMeIn = {logMeIn}/>} />
+          <Route path='/chat' element={<Blog currentUser={currentUser}/>} />
+          <Route path='/posts/create' element={<CreatePost currentUser={currentUser}/>} />
+          <Route path='/game' element={<Game/>} />
+        </Routes>
+        <Legend />
+      </div>
     </div>
   );
 }

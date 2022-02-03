@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, jsonify, request
-from itsdangerous import json
-from app.models import Cart, Product
+from app.api_auth_helper import token_required
+from app.models import Cart, Product, User, Inventory
 
 import os
 import stripe
@@ -74,3 +74,65 @@ def removeFromCart():
 @shop.route('/api/emptyCart', methods=['POST'])
 def emptyCart():
     return
+
+
+@shop.route('/api/inventory', methods=['POST'])
+def updateInventory():
+    data= request.json
+    
+    user_id = data['user_id']   
+    item_name = data['item_name']
+    value = data['value']
+    item_type = data['item_type']
+
+    user = User.query.filter_by(id=user_id).first()
+    if user:
+        newInventoryitem = Inventory(item_name, value, item_type, user_id)
+        db.session.add(newInventoryitem)
+       
+        
+        return jsonify({
+        'status': 'succes',
+        'message': f'You have succesfully added item {item_name} to your cart'
+    })
+
+    return jsonify({
+        'status': 'error',
+        'message': "Sorry something went wrong"
+    })
+
+@shop.route('/api/getInventory', methods=['POST'])
+def getInventory():
+    data = request.json
+    user_id= data['user_id']
+    inventory = Inventory.query.filter_by(user_id = user_id).all()
+    print(inventory)
+    return jsonify([i.to_dict() for i in inventory])
+
+@shop.route('/api/deleteItem', methods=['POST'])
+def deleteItem():
+    data = request.json
+    user_id = data['user_id']
+    item_name= data['item_name']
+    print(user_id)
+    # user = User.query.filter_by(id= user_id)
+
+    inventory= Inventory.query.filter_by(user_id = user_id).filter_by(name=item_name).first()
+    print(inventory, 'inventory')
+    
+
+    
+    
+    
+    db.session.delete(inventory)
+    db.session.commit()
+    
+    return jsonify({
+        'status': 'success',
+        'message': f'item has been removed'
+    })
+
+
+
+
+

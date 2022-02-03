@@ -1,5 +1,3 @@
-from math import prod
-from ntpath import join
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from werkzeug.security import generate_password_hash
@@ -16,11 +14,11 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), nullable=False, unique=True)
     password = db.Column(db.String(256), nullable=False)
     post = db.relationship('Post',backref='author', lazy=True)
-    cart_item = db.relationship('Cart',backref='author', lazy=True)
-    comments = db.relationship('Comment',backref='customer', lazy=True, passive_deletes=True)  
-    likes = db.relationship('Like',backref='user', lazy=True, passive_deletes=True) 
+    cart_item = db.relationship('Cart',backref='author', lazy=True) 
     is_admin = db.Column(db.Boolean(), default =False)
     api_token = db.Column(db.String(32), default= None, nullable= True)
+    inventory_id = db.relationship('Inventory',backref='owner', lazy=True)
+    
 
     def __init__(self, username, email, password,is_admin=False):
         self.username = username
@@ -41,12 +39,14 @@ class Post(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     text = db.Column(db.Text, nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.now)
+    username = db.Column(db.String(150), nullable= False, unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
-    comments = db.relationship('Comment',backref='post', lazy=True, passive_deletes=True) 
-    likes = db.relationship('Like',backref='post', lazy=True, passive_deletes=True)
+    # comments = db.relationship('Comment',backref='post', lazy=True, passive_deletes=True) 
+    # likes = db.relationship('Like',backref='post', lazy=True, passive_deletes=True)
 
-    def __init__(self, text, user_id):
+    def __init__(self, text, username, user_id):
         self.text = text
+        self.username = username
         self.user_id = user_id
 
     def to_dict(self):
@@ -54,28 +54,10 @@ class Post(db.Model):
             'id': self.id,
             'text': self.text,
             'date_created': self.date_created,
+            'username': self.username,
             'author': self.user_id,
-            'comments': self.comments,
-            'likes': self.likes,
         }
 
-class Comment(db.Model):
-    id = db.Column(db.Integer,primary_key=True)
-    text = db.Column(db.String(200), nullable=False)
-    date_created = db.Column(db.DateTime, nullable = False, default=datetime.now)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete="CASCADE"), nullable=False)
-
-    def __init__(self, text, user_id, post_id):
-        self.text = text
-        self.user_id = user_id
-        self.post_id = post_id
-
-class Like(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    date_created = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete="CASCADE"), nullable=False)
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -111,3 +93,58 @@ class Cart(db.Model):
     def __init__(self, user_id, product_id):
         self.user_id = user_id
         self.product_id = product_id
+
+class Inventory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name= db.Column(db.String, nullable=False)
+    value= db.Column(db.Integer, nullable=False)
+    item_type= db.Column(db.String, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
+    
+    
+    def __init__(self, name, value, item_type, user_id):
+        self.name= name
+        self.value= value
+        self.item_type= item_type
+        self.user_id= user_id
+
+    def to_dict(self):
+        return {
+            'id' : self.id,
+            'name' : self.name,
+            'value' : self.value,
+            'item_type' : self.item_type,
+            'user_id' : self.user_id,
+        }
+
+
+# class Item(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+    
+#     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
+
+# class Comment(db.Model):
+#     id = db.Column(db.Integer,primary_key=True)
+#     text = db.Column(db.String(200), nullable=False)
+#     date_created = db.Column(db.DateTime, nullable = False, default=datetime.now)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
+#     post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete="CASCADE"), nullable=False)
+
+#     def __init__(self, text, user_id, post_id):
+#         self.text = text
+#         self.user_id = user_id
+#         self.post_id = post_id
+
+# class Like(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
+#     post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete="CASCADE"), nullable=False)
+
+
+
+
+
+
+
+

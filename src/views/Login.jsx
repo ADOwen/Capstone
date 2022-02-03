@@ -44,29 +44,29 @@ const Login = ({logMeIn}) => {
     }
         return (
             redirect ? <Navigate to="/shop"/>:
-            <>
-            <div className='container'>
-                <form onSubmit={(e)=>{sendCredentials(e)}}>
-                    <div className="form-group">
-                        <fieldset>
-                            <label htmlFor="username">Username</label>
-                            <input className="form-control" id="username" name="username" placeholder="Username" required="" type="text" />
-                        </fieldset>
-                        <fieldset>
-                            <label htmlFor="password">Password</label>
-                            <input className="form-control" id="password" name="password" placeholder="Password" required="" type="password"/>
-                        </fieldset>
-                        <fieldset>
-                            <label htmlFor="remember_me">Remember Me</label>
-                            <input className="form-check-input" id="remember_me" name="remember_me" type="checkbox" value="y" />
-                        </fieldset>
-                        <input className="btn btn-primary" id="submit" name="submit"  type="submit" value="Sign In" />
-                    </div>
-                </form>
+            <div className="left-container">
+                <div className='container'>
+                    <form onSubmit={(e)=>{sendCredentials(e)}}>
+                        <div className="form-group">
+                            <fieldset>
+                                <label htmlFor="username">Username</label>
+                                <input className="form-control" id="username" name="username" placeholder="Username" required="" type="text" />
+                            </fieldset>
+                            <fieldset>
+                                <label htmlFor="password">Password</label>
+                                <input className="form-control" id="password" name="password" placeholder="Password" required="" type="password"/>
+                            </fieldset>
+                            <fieldset>
+                                <label htmlFor="remember_me">Remember Me</label>
+                                <input className="form-check-input" id="remember_me" name="remember_me" type="checkbox" value="y" />
+                            </fieldset>
+                            <input className="btn btn-primary" id="submit" name="submit"  type="submit" value="Sign In" />
+                        </div>
+                    </form>
+                </div>
+                {/* <button onClick={()=> signInGoogle()}>Sign in with google</button> */}
+                <div className="mt-2 text-center">Don't have an account? <Link className='text-decoration-none' to="/register">Register</Link></div>
             </div>
-            <button onClick={()=> signInGoogle()}>Sign in with google</button>
-            <div className="mt-2 text-center">Don't have an account? <Link className='text-decoration-none' to="/register">Register</Link></div>
-            </>
         )
     }
 

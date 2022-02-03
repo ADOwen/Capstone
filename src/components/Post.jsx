@@ -2,21 +2,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../css/post.css'
 
-export const Post = ({post}) => {
-
-  return (
-      <div className='container post-container'>
-          <Link className ="card text-decoration-none text-dark" to="">
-              <div className="card-header">
-                  <p>{post.id}</p>
-              </div>
-            <div className="card-body">
-                <p className="card-text">{post.text}</p>
-            </div>
-            <div className="card-footer">today</div>
-          </Link>
-      </div>
-  )
+export const Post = ({ post }) => {
+    console.log(post)
+    const dateObject = new Date(post.date_created);
+    //const date = dateObject.parse(post.date_created);
+    const dateString = dateObject.toLocaleTimeString(navigator.language, {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    return (
+        <div className='message'>
+            <div className="message-text"><span className="message-author">{post.username}:</span> {post.text}</div>
+            <div className="message-date">{dateString}</div>
+        </div>
+    )
 };
 
 export default Post;

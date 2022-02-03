@@ -10,8 +10,11 @@ const Shop = ({products, addToCart, addToCartAPI, user_id}) => {
   }
 
   return (
-      <div className='row arcade'>
-          {loopThroughProducts(products)}
+      <div className='left-container-with-title'>
+          <h2 className="section-title">Shop</h2>
+          <div className="scroll-container">
+            {loopThroughProducts(products)}
+          </div>
       </div>
   )
 };
