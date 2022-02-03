@@ -71,6 +71,7 @@ gameScene.preload = function () {
   // level images/data
   this.load.image("tiles", "./game/assets/images/Tileset.png");
   this.load.image("willow-sheet", "./game/assets/images/willows.png");
+  this.load.image('stone-sheet',"./game/assets/images/stones.png" )
   this.load.tilemapTiledJSON(
     "level-1",
     "./game/assets/tilesets/level-1.1.json"
@@ -257,6 +258,9 @@ gameScene.create = function () {
 
   const willowTiles = this.map.addTilesetImage("willows", "willow-sheet");
   const willowLayer = this.map.createStaticLayer("trees", willowTiles);
+
+  const stoneTiles = this.map.addTilesetImage('stones','stone-sheet')
+  const stoneLayer = this.map.addTilesetImage('stone-layer', stoneTiles)
 
   this.physics.world.setBounds(0,0,this.map.widthInPixels,this.map.heightInPixels);
   this.physics.world.setBoundsCollision(true, true, false, true);

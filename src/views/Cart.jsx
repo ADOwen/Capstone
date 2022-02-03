@@ -51,7 +51,7 @@ const Cart = ({ cart, removeFromCart,removeFromCartAPI, sumTotalCart, currentUse
                                             <td>${p.price}</td>
                                             <td>${(getQuantity(p, cart) * p.price).toFixed(2)}</td>
                                             <td>
-                                                <button  onClick={()=>{removeFromCartAPI(p.id,currentUser.id); removeFromCart(p)} } className='btn btn-danger btn-sm'>Remove</button>
+                                                <button  onClick={()=>{removeFromCartAPI(currentUser.id, p.id); removeFromCart(p)} } className='btn btn-danger btn-sm'>Remove</button>
                                             </td>
                                         </tr>
                                     ))}

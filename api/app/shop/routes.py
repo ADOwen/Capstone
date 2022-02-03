@@ -77,6 +77,7 @@ def deleteCartItem():
     # user = User.query.filter_by(id= user_id)
 
     cart_item= Cart.query.filter_by(user_id = user_id).filter_by(product_id= product_id).first()
+    print(cart_item)
           
     
     db.session.delete(cart_item)

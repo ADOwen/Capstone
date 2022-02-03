@@ -50,9 +50,7 @@ const Blog = ({ currentUser }) => {
             console.log('yay')
         }
     }
-    useEffect(()=>{
-        getPosts()
-    },[])
+
 
 
     return (
