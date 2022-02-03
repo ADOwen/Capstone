@@ -39,10 +39,9 @@ class Post(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     text = db.Column(db.Text, nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.now)
-    username = db.Column(db.String(150), nullable= False, unique=True)
+    username = db.Column(db.String(150), nullable= False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
-    # comments = db.relationship('Comment',backref='post', lazy=True, passive_deletes=True) 
-    # likes = db.relationship('Like',backref='post', lazy=True, passive_deletes=True)
+
 
     def __init__(self, text, username, user_id):
         self.text = text
@@ -68,12 +67,11 @@ class Product(db.Model):
     created_on = db.Column(db.DateTime, default=datetime.now)
     cart_item = db.relationship('Cart',backref='cart_product', lazy=True)
 
-    def __init__(self, name, price, image, description,created_on):
+    def __init__(self, name, price, image, description):
         self.name = name
         self.price = price
         self.image = image
         self.description = description
-        self.created_on = created_on
 
     def to_dict(self):
         return {
@@ -118,28 +116,6 @@ class Inventory(db.Model):
         }
 
 
-# class Item(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-    
-#     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
-
-# class Comment(db.Model):
-#     id = db.Column(db.Integer,primary_key=True)
-#     text = db.Column(db.String(200), nullable=False)
-#     date_created = db.Column(db.DateTime, nullable = False, default=datetime.now)
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
-#     post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete="CASCADE"), nullable=False)
-
-#     def __init__(self, text, user_id, post_id):
-#         self.text = text
-#         self.user_id = user_id
-#         self.post_id = post_id
-
-# class Like(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now)
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
-#     post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete="CASCADE"), nullable=False)
 
 
 

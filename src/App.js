@@ -14,6 +14,7 @@ import Game from './views/Game';
 import StripeShop from './views/StripeShop';
 import Legend from './components/Legend';
 import { getDatabase, ref, child, get, set } from 'firebase/database';
+import { Curves } from 'phaser';
 
 // create demo products
 const demoProducts = [
@@ -141,6 +142,8 @@ function App() {
     setCart(newCart)
   }
 
+  
+
   const sumTotalCart = (cart) => {
     let total = 0;
     for(let i = 0; i < cart.length; i++){
@@ -152,6 +155,19 @@ function App() {
   // api cart/shop methods
   const addToCartAPI = async (user_id, product_id) => {
     const res = await fetch('http://localhost:5000/api/addToCart', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user_id: user_id,
+        product_id: product_id
+      })
+    })
+    const data = await res.json()
+  }
+  const removeFromCartAPI = async (user_id, product_id) => {
+    const res = await fetch('http://localhost:5000/api/removeFromCart', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -191,6 +207,7 @@ function App() {
     if(user) {
       setCurrentUser(user);
       setIsLoggedIn(true);
+      console.log(user)
     }
   },[])
 
@@ -218,7 +235,8 @@ function App() {
           <Route path='/shop' element={<Shop products= {products} user_id={currentUser.id} addToCartAPI ={addToCartAPI} addToCart={addToCart}/>} />
           <Route path='/shop/:id' element={<SingleProduct user_id={currentUser.id} addToCartAPI ={addToCartAPI} addToCart ={addToCart}/>} />
           <Route path='/stripe/shop' element={<StripeShop addToStripeCart={addToStripeCart}/>} />
-          <Route path='/cart' element={<Cart sumTotalCart ={sumTotalCart} removeFromCart={removeFromCart} cart={cart}/>} />
+          <Route path='/cart' element={<Cart sumTotalCart ={sumTotalCart} removeFromCart={removeFromCart} 
+                                        currentUser={currentUser} removeFromCartAPI={removeFromCartAPI}cart={cart}/>} />
           <Route path='/register' element={<Register/>} />
           <Route path='/login' element={<Login logMeIn = {logMeIn}/>} />
           <Route path='/chat' element={<Blog currentUser={currentUser}/>} />

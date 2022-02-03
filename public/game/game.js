@@ -1,3 +1,15 @@
+
+let startScene = new Phaser.Scene('Start')
+    
+startScene.create = function () {
+    this.add.text(180,150, 'Beat Up The Baddies', {fill: '#fff', fontSize:'36px'} )
+    this.add.text(310,350, 'Click to Start',{fill: '#fff', fontSize: '18px'})
+    this.input.on('pointerup', ()=>{
+        this.scene.stop('Start')
+        this.scene.start('Game')
+    })   
+}
+
 gameState = {
   healthPotions: 0,
   manaPotions: 0,
@@ -153,6 +165,8 @@ gameScene.create = function () {
   };
 
   addHealthPotion = function (player, item) {
+    let spawnX = item.x
+    let spawnY = item.y
     item.anims.play("open-chest", true);
     gameState.healthPotions++;
     gameState.healthText.setText(`  x ${gameState.healthPotions}`);
@@ -170,6 +184,8 @@ gameScene.create = function () {
   };
 
   addManaPotion = function (player, item) {
+    let spawnX = item.x
+    let spawnY = item.y
     item.disableBody(true, true);
     gameState.manaPotions++;
     gameState.score += 1000;
@@ -507,6 +523,7 @@ gameScene.create = function () {
       gameState.health -= .5;
       console.log(gameState.player.health)
       gameState.healthBar.setText(`Health: ${gameState.health}`);
+
     }
   };
 
@@ -579,8 +596,33 @@ gameScene.update = function (time, delta) {
       gameState.healthBar.setText(`Health: ${gameState.health}`);
     }
   };
+  
+  if (gameState.health <= 0 || gameState.player.y >= mapHeight - gameState.player.height) {
+    if(gameState.player.y >= mapHeight - gameState.player.height){
+      gameState.player.disableBody(true,false)
+      gameState.player.setTint(0xff0000)
+      this.physics.pause();
+      this.anims.pauseAll();
+    }
+    else{
+    gameState.player.disableBody(true,false)
+    gameState.player.setTint(0xff0000)
+    this.physics.pause();
+    this.anims.pauseAll();
 
-  if (this.cursors.space.isDown && time > gameState.attackCoolDown) {
+}
+   setTimeout(()=>{
+      
+      this.add.text(280,150, 'Game Over', {fill: '#fff', fontSize:'36px'} ).setScrollFactor(0)
+      this.add.text(270, 250, `Your Final Score: ${gameState.score}`, {fontSize: '18px'} ).setScrollFactor(0)
+    }, 500)
+    // this.scene.stop('Game')
+    // this.scene.start('GameOver')
+
+  }
+
+
+  else if (this.cursors.space.isDown && time > gameState.attackCoolDown) {
     if (gameState.player.flipX) {
       gameState.player.body.setSize(24, 28);
       gameState.player.body.setOffset(3, 7);
@@ -617,7 +659,7 @@ gameScene.update = function (time, delta) {
     bullet.setVelocityX(gameState.fireSpeed * dir);
     
     gameState.lastFired = time + 2500;
-  } else if (manaKey.isDown && time > gameState.manaCoolDown && gamestate.manaPotions > 0) {
+  } else if (manaKey.isDown && time > gameState.manaCoolDown && gameState.manaPotions > 0) {
     useManaPotion();
     removeInventory("Mana-Potion")
     gameState.manaCoolDown = time + 1000;
@@ -747,11 +789,23 @@ Phaser.Actions.Call(
   );
 };
 
+let endScene = new Phaser.Scene('GameOver')
+
+endScene.create = function () {
+  this.add.text(280,150, 'Game Over', {fill: '#fff', fontSize:'36px'} )
+  this.add.text(280, 250, `Your Final Score: ${gameState.score}`, {fontSize: '18px'} )
+  this.add.text(300,350, 'Click to Start',{fill: '#fff', fontSize: '18px'})
+  this.input.on('pointerup', ()=>{
+      this.scene.stop('GameOver')
+      this.scene.start('Start')
+  })   
+}
+
 let config = {
   type: Phaser.AUTO,
   width: 800,
   height: 450,
-  scene: gameScene,
+  scene: [startScene, gameScene, endScene],
   title: "Adventure",
   parent: "main",
   pixelArt: true,
@@ -759,7 +813,7 @@ let config = {
     default: "arcade",
     arcade: {
       gravity: { y: 600 },
-      debug: true,
+      debug: false,
     },
   },
 };

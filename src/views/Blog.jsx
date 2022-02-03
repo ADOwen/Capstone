@@ -50,17 +50,20 @@ const Blog = ({ currentUser }) => {
             console.log('yay')
         }
     }
+    useEffect(()=>{
+        getPosts()
+    },[])
 
 
     return (
         <div className="left-container-with-title">
-            <h2 className="section-title">Comments</h2>
+            <h2 className="section-title">ChatBox</h2>
             <div className="chatbox-wrapper">
                 <div className="chat-wrapper">
                     {loopThroughPosts(posts)}
                 </div>
                 <div className="chat-controls">
-                    <form onSubmit={submitComment} className="chat-form">
+                    <form onSubmit={(e)=>{submitComment(e)}} className="chat-form">
             
                         <label className="chat-label">
                             <input type="text" placeholder="Send a message" className="chat-input" onChange={handleChange} value={comment} />

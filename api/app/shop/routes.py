@@ -68,12 +68,24 @@ def addToCart():
     })
 
 @shop.route('/api/removeFromCart', methods=['POST'])
-def removeFromCart():
-    return
+def deleteCartItem():
+    data = request.json
+    print(data)
+    user_id = data['user_id']
+    product_id= data['product_id']
+    print(user_id)
+    # user = User.query.filter_by(id= user_id)
 
-@shop.route('/api/emptyCart', methods=['POST'])
-def emptyCart():
-    return
+    cart_item= Cart.query.filter_by(user_id = user_id).filter_by(product_id= product_id).first()
+          
+    
+    db.session.delete(cart_item)
+    db.session.commit()
+    
+    return jsonify({
+        'status': 'success',
+        'message': f'item has been removed'
+    })
 
 
 @shop.route('/api/inventory', methods=['POST'])
@@ -89,6 +101,7 @@ def updateInventory():
     if user:
         newInventoryitem = Inventory(item_name, value, item_type, user_id)
         db.session.add(newInventoryitem)
+        db.session.commit()
        
         
         return jsonify({

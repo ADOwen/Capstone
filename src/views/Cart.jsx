@@ -1,7 +1,7 @@
 import React from 'react';
 import '../css/home.css'
 
-const Cart = ({ cart, removeFromCart, sumTotalCart }) => {
+const Cart = ({ cart, removeFromCart,removeFromCartAPI, sumTotalCart, currentUser}) => {
     const getQuantity = (cartItem, cartList) => {
         let count = 0;
         for (let item of cartList) {
@@ -51,7 +51,7 @@ const Cart = ({ cart, removeFromCart, sumTotalCart }) => {
                                             <td>${p.price}</td>
                                             <td>${(getQuantity(p, cart) * p.price).toFixed(2)}</td>
                                             <td>
-                                                <button onClick={() => removeFromCart(p)} className='btn btn-danger btn-sm'>Remove</button>
+                                                <button  onClick={()=>{removeFromCartAPI(p.id,currentUser.id); removeFromCart(p)} } className='btn btn-danger btn-sm'>Remove</button>
                                             </td>
                                         </tr>
                                     ))}
