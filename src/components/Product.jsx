@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../css/product.css'
+
 
 
 const Product = ({ product, addToCart, addToCartAPI, user_id }) => {

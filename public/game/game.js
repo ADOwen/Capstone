@@ -18,7 +18,7 @@ gameState = {
   maxHealth: 100,
   mana: 3,
   fireballs: 3,
-  strength: 1.5,
+  strength: .5,
   score: 0,
   scoreText: 0,
   lastFired: 0,

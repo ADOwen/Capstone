@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/home.css'
+
 
 const Cart = ({ cart, removeFromCart,removeFromCartAPI, sumTotalCart, currentUser}) => {
     const getQuantity = (cartItem, cartList) => {

@@ -11,7 +11,7 @@ export const Post = ({ post }) => {
         minute: '2-digit'
     });
     return (
-        <div className='message'>
+        <div className='message mt-2'>
             <div className="message-text"><span className="message-author">{post.username}:</span> {post.text}</div>
             <div className="message-date">{dateString}</div>
         </div>
