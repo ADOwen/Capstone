@@ -12,9 +12,13 @@ from flask_login import LoginManager
 
 from flask_cors import CORS, cross_origin
 
-app = Flask(__name__, static_folder= 'my-app/build')
+app = Flask(__name__ ,static_folder='my-app/build', static_url_path='')
 login= LoginManager()
 CORS(app)
+
+@app.route('/')
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
 
 @login.user_loader
 def load_user(user_id):
