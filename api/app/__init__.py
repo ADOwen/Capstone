@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from config import Config
 
 from .auth.routes import auth
@@ -10,9 +10,9 @@ from .models import db, User
 from flask_migrate import Migrate
 from flask_login import LoginManager
 
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder= 'my-app/build')
 login= LoginManager()
 CORS(app)
 
@@ -31,3 +31,8 @@ db.init_app(app)
 login.init_app(app)
 
 migrate = Migrate(app,db)
+
+@app.route('/')
+@cross_origin()
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
