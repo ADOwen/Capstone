@@ -31,8 +31,3 @@ db.init_app(app)
 login.init_app(app)
 
 migrate = Migrate(app,db)
-
-@app.route('/')
-@cross_origin()
-def serve():
-    return send_from_directory(app.static_folder, 'index.html')
