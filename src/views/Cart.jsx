@@ -66,6 +66,7 @@ const Cart = ({ cart, removeFromCart,removeFromCartAPI, sumTotalCart, currentUse
                                     </tr>
                                 </tfoot>
                             </table>
+                            <button className='btn btn-primary btn-sm'>Check Out?</button>
                         </div>
                     </div>
                 </div>
